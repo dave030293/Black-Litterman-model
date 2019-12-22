@@ -1,11 +1,11 @@
 cov<-read.csv("C:\\Users\\David\\Downloads\\cov.csv",header=TRUE)
 str(cov)
 covar<-as.matrix(cov[,2:6])
-colnames(covar)<-c("VIX","VWO","TLT","IEI","IEF")
-rownames(covar)<-c("VIX","VWO","TLT","IEI","IEF")
+colnames(covar)<-c("IVV","VWO","TLT","IEI","IEF")
+rownames(covar)<-c("IVV","VWO","TLT","IEI","IEF")
 
 meanas<-read.csv("C:\\Users\\David\\Downloads\\means.csv",header=TRUE)
-meanas$AssetClass<-c("VIX","VWO","TLT","IEI","IEF")
+meanas$AssetClass<-c("IVV","VWO","TLT","IEI","IEF")
 
 Rvals=seq(min(meanas$m)+0.1^10,max(meanas$m)-0.1^10,length.out=14);
 
@@ -17,13 +17,13 @@ C <- covar
 var1 <- ginv(tscalar * C)
 
 
-P <- matrix( c(1,0,-1,-1,-1,
+P <- matrix( c(1,0,-1,0,0,
                -1,1,0,0,0,
-               0,-1,1,1,1),3,5)
+               0,-1,0,0,1),3,5)
 
-Omega <- matrix(c(0.049563538,-0.058822285,0.009258747,
-                  -0.058822285,0.075653644,-0.016831359,
-                  0.009258747,-0.016831359,0.007572612),3,3)
+Omega <- matrix(c(0.003849326,-0.000107051,-0.002666966,
+                  -0.000107051,0.001371886,-0.001279298,
+                  -0.002666966,-0.001279298,0.003347006),3,3)
 
 var2 <- t(P) %*% ginv(Omega) %*% P
 Q <- c(0.01,0.05,0.03)
@@ -82,12 +82,12 @@ lines(BRvals,Bw3,"l",lty = 1,lwd=3,col='green')
 lines(BRvals,Bw4,"l",lty = 1,lwd=3,col = 'blue')
 lines(BRvals,Bw5,"l",lty = 1,lwd=3,col='violet')
 
-legend('topleft', c("VIX","VWO","TLT","IEI","IEF"), pch = 17, 
+legend('topleft', c("IVV","VWO","TLT","IEI","IEF"), pch = 17, 
        col = c('red','black','green','blue','violet'), text.col = c('red','black','green','blue','violet','dark green','violet','violet'), cex = .6)
 
 #Weights of portfolio assets vs expected returns in separate plots - BL
 par(mfrow = c(2,3))
-plot(BRvals,Bw1,type = 'l', lty = 1,lwd=3, xlab ='Returns' ,ylab = 'Weight' , main = 'VIX index', col = 'red')
+plot(BRvals,Bw1,type = 'l', lty = 1,lwd=3, xlab ='Returns' ,ylab = 'Weight' , main = 'iShares Core S&P 500 ETF', col = 'red')
 plot(BRvals,Bw2,type = 'l', lty = 1,lwd=3, xlab ='Returns' ,ylab = 'Weight' , main = "Vanguard FTSE Emerging Markets ETF (VWO)", col = 'black')
 plot(BRvals,Bw3,type = 'l', lty = 1,lwd=3, xlab ='Returns' ,ylab = 'Weight' , main = "iShares 20+ Year Treasury Bond ETF", col = 'green')
 plot(BRvals,Bw4,type = 'l', lty = 1,lwd=3, xlab ='Returns' ,ylab = 'Weight' , main = "iShares 3-7 Year Treasury Bond ETF", col = 'blue')
